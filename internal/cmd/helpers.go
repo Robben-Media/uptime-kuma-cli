@@ -22,9 +22,20 @@ func getUptimeKumaClient() (*uptimekuma.Client, error) {
 		return nil, fmt.Errorf("open credential store: %w", err)
 	}
 
-	url, _ = store.GetAPIURL()
-	username, _ = store.GetUsername()
-	password, _ = store.GetPassword()
+	url, err = store.GetAPIURL()
+	if err != nil {
+		return nil, fmt.Errorf("read API URL: %w", err)
+	}
+
+	username, err = store.GetUsername()
+	if err != nil {
+		return nil, fmt.Errorf("read username: %w", err)
+	}
+
+	password, err = store.GetPassword()
+	if err != nil {
+		return nil, fmt.Errorf("read password: %w", err)
+	}
 
 	if url == "" || username == "" || password == "" {
 		return nil, fmt.Errorf("no credentials found; run: uptime-kuma-cli auth set-credentials --url <url>")
