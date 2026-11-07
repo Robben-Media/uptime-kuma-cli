@@ -15,10 +15,11 @@ type Client struct {
 func NewClient(baseURL, username, password string, opts ...api.ClientOption) *Client {
 	auth := NewAuthManager(baseURL, username, password)
 
-	allOpts := []api.ClientOption{
+	allOpts := make([]api.ClientOption, 0, 2+len(opts))
+	allOpts = append(allOpts,
 		api.WithUserAgent("uptime-kuma-cli/1.0"),
 		api.WithAuthFn(auth.AuthFn()),
-	}
+	)
 	allOpts = append(allOpts, opts...)
 
 	return &Client{

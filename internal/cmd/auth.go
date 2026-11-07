@@ -103,16 +103,18 @@ func (cmd *AuthSetCredentialsCmd) Run(ctx context.Context) error {
 func readLine(r io.Reader) ([]byte, error) {
 	var line []byte
 
-	buf := make([]byte, 1)
+	var buf [1]byte
 
 	for {
-		n, err := r.Read(buf)
+		n, err := r.Read(buf[:])
 		if n > 0 {
-			if buf[0] == '\n' {
+			byteRead := buf[0]
+
+			if byteRead == '\n' {
 				return line, nil
 			}
 
-			line = append(line, buf[0])
+			line = append(line, byteRead)
 		}
 
 		if err != nil {
